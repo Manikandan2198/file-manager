@@ -4,12 +4,24 @@ import {ArrowUpOutlined, UploadOutlined, PlusOutlined} from '@ant-design/icons'
 import md5 from 'md5';
 import {connect} from 'react-redux';
 import FolderDialog from '../components/FolderDialog';
-
+import FileDialog from '../components/FileDialog';
 import Item from '../components/Items';
+import Navigator from '../components/Navigator';
 
 class Main extends Component{
     state={
-        modalVisible:false
+        folderModalVisible:false,
+        fileModalVisible : false,
+        selectedNodes:[],
+        fileSystem:{}
+    };
+    static getDerivedStateFromProps(nextprops,prevstate){
+        if(prevstate.fileSystem !== nextprops.fileSystem)
+            return {...prevstate, fileSystem: nextprops.fileSystem};
+        return {prevstate};
+    }
+    componentDidUpdate(prevProps,prevsState){
+        console.log(prevProps.fileSystem);
     }
     showPathEntries = (globalPath, fileSystem) => {
         return fileSystem[md5(globalPath)]
@@ -23,26 +35,38 @@ class Main extends Component{
         let newPath = globalPath.slice(0,globalPath.lastIndexOf('/'));
         changeFolder(newPath.slice(0,newPath.lastIndexOf('/')+1));
     }
+    OnItemClick=(nodeId)=>{
+        const {selectedNodes} = this.state;
+        if(!selectedNodes.includes(nodeId)){
+            this.setState({...this.state,selectedNodes:[nodeId]})
+        }else if(selectedNodes.length > 1){
+            let newSelectedNodes = selectedNodes.filter(item=>item !== nodeId)
+            this.setState({...this.state,selectedNodes:newSelectedNodes})
+        }
+    }
     render(){
-        const {fileSystem, globalPath} = this.props;
+        const {fileSystem} = this.state;
+        const { globalPath} = this.props;
         console.log(md5(globalPath));
         const nodes = this.showPathEntries(globalPath,fileSystem);
         console.log(nodes);
         return(
             <div className="w-75 bg-light p-2 ">
                 <div className="w-100 bg-white d-flex flex-row p-2" >
-                    <div style={{width:'70%'}}>
+                    <div style={{width:'70%'}} className="d-flex flex-row">
                         <Button disabled={globalPath === 'root/'} onClick={this.onPathUp} type="link" icon={<ArrowUpOutlined />}></Button>
+                        <Navigator></Navigator>
                     </div>
                     <div style={{width:'30%'}}>
-                        <Button className="mx-1" icon={<UploadOutlined />}>{"Upload File"}</Button>
-                        <Button className="mx-1" onClick={()=>{this.setState({...this.state,modalVisible:true})}} icon={<PlusOutlined />}>{"New Folder"}</Button>
+                        <Button className="mx-1" onClick={()=>{this.setState({...this.state,fileModalVisible:true})}} icon={<UploadOutlined />}>{"Upload File"}</Button>
+                        <Button className="mx-1" onClick={()=>{this.setState({...this.state,folderModalVisible:true})}} icon={<PlusOutlined />}>{"New Folder"}</Button>
                     </div>
                 </div>
-                <div className="d-flex flex-row p-2">
-                    { nodes.map((item,index)=><Item key={index} node={item} />)}
+                <div className="d-flex flex-row p-2 flex-wrap">
+                    { nodes.map((item,index)=><Item key={index} node={item} onClick={this.OnItemClick} isSelected={this.state.selectedNodes.includes(md5(item.path))}/>)}
                 </div>
-                { this.state.modalVisible?<FolderDialog visible={this.state.modalVisible} onCancel={()=>{this.setState({...this.state,modalVisible:false})}}></FolderDialog>:null}
+                { this.state.folderModalVisible?<FolderDialog visible={this.state.folderModalVisible} onCancel={()=>{this.setState({...this.state,folderModalVisible:false})}}></FolderDialog>:null}
+                { this.state.fileModalVisible?<FileDialog visible={this.state.fileModalVisible} onCancel={()=>{this.setState({...this.state,fileModalVisible:false})}}></FileDialog>:null}
             </div>
         )
     }
