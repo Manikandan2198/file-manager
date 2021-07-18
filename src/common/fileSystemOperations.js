@@ -86,7 +86,7 @@ const EditEntry = (fileSystem, oldEntry, newEntry)=>{
 const SearchText = (fileSystem,currentEntry,text)=>{
     let queue = [];
     let tempList = [];
-    queue.push(currentEntry);
+    fileSystem[currentEntry].children.forEach(child=>queue.push(child));
     while(queue.length>0){
         let top = queue[0];
         queue.shift();
