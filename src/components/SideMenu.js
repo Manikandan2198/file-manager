@@ -22,12 +22,11 @@ class SideMenu extends Component {
 
   render() {
     const { fileStructure } = this.state;
-    console.log(fileStructure);
     return (
       <div style={{overflow:'auto',height:'90%',width:'100%',background:'#f2f3f9'}} className='m-2 p-2'>
         <div onClick={()=>{this.props.changeFolder('root/')}} style={{cursor:'pointer'}}><h4 className='text-primary'>{'root /'} </h4></div>
         {fileStructure.children.map(element=>{
-          return <MenuItems node = {element} childVisible={true}></MenuItems>
+          return <MenuItems key={element.path} node = {element} childVisible={true}></MenuItems>
         })}
       </div>
     );

@@ -6,34 +6,53 @@ const recalculateSize=(fileSystem,parentId,size)=>{
         parentId = fileSystem[parentId].parentID;
     }
 }
-const AddEntry = (fileSystem,newEntry)=>{
-    if(newEntry.type === 'folder'){
-        let duplicates = fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name.includes(newEntry.name)).length;
-        if(duplicates>0){
-            newEntry.name = `${newEntry.name}_${duplicates}`;
-            newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+
+const CheckForDuplicatesFolder = (fileSystem,files,name,index)=>{
+    let flag =false;
+    while(!flag){
+        if(files.map(id=>fileSystem[id]).filter(item=>item.name === `${name}${'_'}${index}`).length === 0){
+            flag=true;
+            return `${name}${'_'}${index}`;
+        }else{
+            index++;
         }
-        let newEntrykey = md5(newEntry.path);
-        fileSystem[newEntrykey] = newEntry;
-        fileSystem[newEntry.parentID].children.push(newEntrykey);
-        recalculateSize(fileSystem,newEntry.parentID,newEntry.size);
-    }else{
-        let duplicates = fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name.includes(newEntry.name)).length;
-        if(duplicates>0){
-            let temp = newEntry.name.split('.');
-            if (temp.length > 1) {
-                temp[temp.length - 2] = `${temp[temp.length - 2]}_${duplicates}`;
-                newEntry.name = temp.join('.');
-            } else {
-                newEntry.name = `${newEntry.name}_${duplicates}`;
-            }
-            newEntry.path = `${newEntry.parentPath}${newEntry.name}`
-        }
-        let newEntrykey = md5(newEntry.path);
-        fileSystem[newEntrykey] = newEntry;
-        fileSystem[newEntry.parentID].children.push(newEntrykey);
-        recalculateSize(fileSystem,newEntry.parentID,newEntry.size);
     }
+}
+
+const CheckForDuplicatesFiles = (fileSystem,files,name,index)=>{
+    let flag =false;
+    while(!flag){
+        let splitName = name.split('.');
+        let newName = '';
+        if(splitName.length>1){
+            splitName[splitName.length - 2] = `${splitName[splitName.length - 2]}_${index}`;
+            newName = splitName.join('.');
+        }else{
+            newName = `${newEntry.name}_${index}`
+        }
+        if(files.map(id=>fileSystem[id]).filter(item=>item.name === newName).length === 0){
+            flag=true;
+            return newName;
+        }else{
+            index++;
+        }
+    }
+}
+
+const AddEntry = (fileSystem,newEntry)=>{
+    if(fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name === newEntry.name).length>0){
+        if(newEntry.type === 'folder'){
+            newEntry.name = CheckForDuplicatesFolder(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
+            newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+        }else{
+            newEntry.name = CheckForDuplicatesFiles(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
+            newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+        }   
+    }
+    let newEntrykey = md5(newEntry.path);
+    fileSystem[newEntrykey] = newEntry;
+    fileSystem[newEntry.parentID].children.push(newEntrykey);
+    recalculateSize(fileSystem,newEntry.parentID,newEntry.size);
     return fileSystem;
 }
 
@@ -60,11 +79,14 @@ const DeletEntry=(fileSystem,entryId)=>{
 }
 
 const EditEntry = (fileSystem, oldEntry, newEntry)=>{
-    let parent = fileSystem[oldEntry.parentID];
-    let duplicates = fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name.includes(newEntry.name)).length;
-    if(duplicates>0){
-        newEntry.name = `${newEntry.name}_${duplicates}`;
-        newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+    if(fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name === (newEntry.name)).length>0){
+        if(newEntry.type === 'folder'){
+            newEntry.name = CheckForDuplicatesFolder(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
+            newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+        }else{
+            newEntry.name = CheckForDuplicatesFiles(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
+            newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
+        }   
     }
     let index = parent.children.indexOf(md5(oldEntry.path));
     if(index !== -1)

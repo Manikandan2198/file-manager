@@ -23,14 +23,6 @@ class RenameDialog extends Component {
         this.setState({...this.state,nodeName:this.props.node.name});
     }
 
-    // static getDerivedStateFromProps(nextProps,prevState){
-    //     console.log(prevState.nodeName);
-    //     console.log(nextProps.nodeName);
-    //     if(nextProps.nodeName !== prevState.nodeName){
-    //         return {...prevState,nodeName: nextProps.nodeName}
-    //     }
-    //     return {...prevState};
-    // }
     onOk = () => {
         const {globalPath, renameEntry, node} = this.props;
         if(this.state.nodeName === ''){

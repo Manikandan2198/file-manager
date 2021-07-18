@@ -9,12 +9,14 @@ import SearchBar from '../components/SearchBar';
 import {SearchText} from '../common/fileSystemOperations'
 
 class Main extends Component{
+
     state={
         selectedNodes:[],
         fileSystem:{},
         globalPath:'',
         searchText:''
     };
+
     static getDerivedStateFromProps(nextprops,prevstate){
         if(prevstate.fileSystem !== nextprops.fileSystem){
             if(prevstate.globalPath !== nextprops.globalPath)
@@ -26,18 +28,21 @@ class Main extends Component{
             return {...prevstate,globalPath:nextprops.globalPath, selectedNodes:[],searchText:''}
         return {prevstate};
     }
+
     showPathEntries = (globalPath, fileSystem) => {
         return fileSystem[md5(globalPath)]
           ? fileSystem[md5(globalPath)].children.map(
               childrenID => fileSystem[childrenID]
             )
           : [];
-      };
-      onPathUp = ()=>{
+      }
+
+    onPathUp = ()=>{
         const {globalPath, changeFolder} = this.props;
         let newPath = globalPath.slice(0,globalPath.lastIndexOf('/'));
         changeFolder(newPath.slice(0,newPath.lastIndexOf('/')+1));
     }
+
     OnItemClick=(nodeId,e)=>{
         const {selectedNodes} = this.state;
         console.log(event);
@@ -57,12 +62,11 @@ class Main extends Component{
             this.setState({...this.state,selectedNodes:newSelectedNodes})
         }
     }
+
     render(){
         const {fileSystem, searchText} = this.state;
         const { globalPath} = this.props;
-        console.log(md5(globalPath));
         const nodes = this.showPathEntries(globalPath,fileSystem);
-        console.log(nodes);
         const searchResults = SearchText(fileSystem,md5(globalPath),searchText);
         return(
             <div className="w-75 bg-white p-2 h-100">

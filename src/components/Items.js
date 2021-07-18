@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { Menu, Dropdown } from 'antd';
 import RenameDialog from './RenameDialog';
 import PropertiesDialog from './PropertiesDialog';
-
+import icons from '../common/Icons';
 
 
 class Item extends Component {
@@ -46,8 +46,6 @@ class Item extends Component {
     }
     render() {
         const { node, searchText } = this.props;
-        console.log(node)
-
         const GetDisplayname=()=>{
             if(searchText === '')
                 return node.name;
@@ -71,18 +69,18 @@ class Item extends Component {
                 <Menu.Item key="1" onClick={this.onMultipleDelete}>{'Delete'}</Menu.Item>
             </Menu>
         )
+        let nameParts = node.name.split('.');
+        let ext = nameParts[nameParts.length-1];
+        let iconSrc = (node.type === 'folder')?icons['folder']:icons[ext]?icons[ext]:icons['file'];
         return (
             <Dropdown overlay={this.props.selectedNodes.length>1?multipleMenu:singleMenu} trigger={['contextMenu']}>
                 <div onContextMenu={(e) => {this.props.onClick(md5(node.path),e)}} onClick={(e) => {this.props.onClick(md5(node.path),e);e.stopPropagation()}} onDoubleClick={this.onDoubleClick} style={{ height: 100, width: 100, background: this.props.isSelected ? '#d9eae6' : '' }} className='p-2 m-2 text-center'>
-                    {node.type === 'folder' ? <img src="./src/styles/images/folder.png" /> : <img style={{ height: '60px' }} src="./src/styles/images/file.png" />}
+                    <img style={{ height: '60px' }} src={iconSrc}/>
                     <div className="w-100 text-center text-break" style={{fontSize:'small'}}>{GetDisplayname()}</div>
                     {this.state.renameModalVisible?<RenameDialog  node={node} visible={this.state.renameModalVisible} onCancel={()=>{this.setState({...this.state,renameModalVisible:false})}}></RenameDialog>:null}
                     {this.state.propertiesModalVisible?<PropertiesDialog  node={node} visible={this.state.propertiesModalVisible} onCancel={()=>{this.setState({...this.state,propertiesModalVisible:false})}}></PropertiesDialog>:null}
                 </div>
             </Dropdown>
-
-
-
         )
     }
 }

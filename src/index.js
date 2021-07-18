@@ -9,7 +9,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "antd/dist/antd.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Provider } from 'react-redux';
-import { createStore,applyMiddleware,compose } from 'redux';
+import { createStore } from 'redux';
 import rootReducer from './reduxFlow/reducers/rootReducer';
 
 const store = createStore(

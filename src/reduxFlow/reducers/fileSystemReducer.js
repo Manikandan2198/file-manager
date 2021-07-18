@@ -1,7 +1,7 @@
-import generatedDummyFileSystem from '../../common/initialFileSystem';
+import InitialFileSystem from '../../common/initialFileSystem';
 import {AddEntry, DeletEntry, EditEntry, MultipleDelete} from '../../common/fileSystemOperations';
 
-const fileSystem =  (data = generatedDummyFileSystem(), action) => {
+const fileSystem =  (data = InitialFileSystem, action) => {
     if (action.type === 'ADD_ENTRY'){
         let newEntry = action.entry;
         return {...AddEntry(data,newEntry)};

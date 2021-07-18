@@ -15,7 +15,6 @@ class MenuItems extends Component {
 
     render() {
         const { node } = this.props;
-        console.log(this.state.childVisible);
         return (
             <div>
                 {node.children.length === 0 ?
@@ -32,11 +31,10 @@ class MenuItems extends Component {
                         {this.state.childVisible ?
                             <div style={{ marginLeft: 15 }}>
                                 {node.children.map(element => {
-                                    return <MenuItems node={element} childVisible={false} changeFolder={this.props.changeFolder}></MenuItems>
+                                    return <MenuItems key={element.path} node={element} childVisible={false} changeFolder={this.props.changeFolder}></MenuItems>
                                 })}
                             </div> : null
                         }
-
                     </div>
                 }
             </div>

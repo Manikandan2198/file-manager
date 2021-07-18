@@ -8,12 +8,12 @@ import FolderDialog from '../components/FolderDialog';
 import FileDialog from '../components/FileDialog';
 
 class Tree extends Component {
+
     state =
         {
             folderModalVisible:false,
             fileModalVisible : false,
         }
-
 
     render() {
         const { files } = this.props;
@@ -32,15 +32,13 @@ class Tree extends Component {
             </div>
         )
     }
-
 }
+
 const mapStateToProps = (state) => {
     return {
         files: state.fileSystem,
     };
 
 }
-
-
 
 export default connect(mapStateToProps)(Tree);

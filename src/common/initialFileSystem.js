@@ -1,4 +1,4 @@
-const dummyFileSystem = {
+const InitialFileSystem = {
     'ea278d3e246754e8da1163a8e6517c08': {
       type: 'folder',
       name: 'root',
@@ -46,9 +46,5 @@ const dummyFileSystem = {
       }
   };
   
-  const generatedummyFileSystem = () => {
-    localStorage.setItem('fileSystem', JSON.stringify(dummyFileSystem));
-    return dummyFileSystem;
-  };
-  
-  export default generatedummyFileSystem;
+
+  export default InitialFileSystem;

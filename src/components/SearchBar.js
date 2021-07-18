@@ -11,9 +11,6 @@ class SearchBar extends Component{
     }
     render(){
         const {Search} = Input;
-        const {fileSystem} = this.props;
-        const nodeList = Object.keys(fileSystem).map(entryId=>fileSystem[entryId]);
-        console.log(nodeList);
         return (
             <Search value = {this.state.searchText} placeholder='Search' onChange={this.props.onSearchTextChange}>
             </Search>

@@ -15,7 +15,6 @@ class Navigator extends Component{
                 initialPath = targetPath;
                 return {text:path,targetPath}
             });
-            console.log(pathList);
             return pathList;
         }
         return(
