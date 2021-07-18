@@ -37,6 +37,10 @@ const AddEntry = (fileSystem,newEntry)=>{
     return fileSystem;
 }
 
+const MultipleDelete = (fileSystem,entries)=>{
+    entries.forEach(entry=>{DeletEntry(fileSystem,entry)});
+    return fileSystem;
+}
 
 const DeletEntry=(fileSystem,entryId)=>{
     let data = fileSystem[entryId]
@@ -77,4 +81,33 @@ const EditEntry = (fileSystem, oldEntry, newEntry)=>{
     });
     return fileSystem;
 }
-export {AddEntry,DeletEntry,EditEntry};
+
+  
+const SearchText = (fileSystem,currentEntry,text)=>{
+    let queue = [];
+    let tempList = [];
+    queue.push(currentEntry);
+    while(queue.length>0){
+        let top = queue[0];
+        queue.shift();
+        tempList.push(top);
+        fileSystem[top].children.forEach(entry=>queue.push(entry));
+    }
+    return tempList.map(item=>fileSystem[item]).filter(item=>item.name.includes(text));
+}
+
+const CreateFileStructure = (fileSystem)=>{
+    let rootId = md5('root/');
+    let fileStructure = [];
+    fileStructure.push({...fileSystem[rootId]});
+    GenerateTreeRecursively(fileStructure,fileSystem,fileStructure[0]);
+    return fileStructure;
+}
+
+const GenerateTreeRecursively = (fileStructure,fileSystem,root)=>{
+    root.children = root.children.filter(id=>fileSystem[id].type !== 'file').map(elementId=>{return {...fileSystem[elementId]}});
+    root.children.forEach(element=>GenerateTreeRecursively(fileStructure,fileSystem,element));
+    return fileStructure;
+}
+  
+export {AddEntry,DeletEntry,EditEntry, MultipleDelete,SearchText,CreateFileStructure};

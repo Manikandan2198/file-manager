@@ -19,7 +19,8 @@ class Navigator extends Component{
             return pathList;
         }
         return(
-            <div className='d-flex flex-row p-1'>{makeList().map((item,index)=>(
+            <div className='d-flex flex-row p-1'>{ this.props.isSearch?<div>{'Showing search results...'}</div>:
+                makeList().map((item,index)=>(
                 <div key={index} className='d-flex flex-row' onClick={()=>this.onPathClick(item)}>
                     <div className='px-1 font-weight-bold '><u style={{cursor:"pointer"}}>{item.text}</u></div>
                     <div className='px-1 font-weight-bold '>{'/'}</div>

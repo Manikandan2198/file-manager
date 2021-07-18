@@ -43,7 +43,7 @@ class FileDialog extends Component {
     render() {
 
         return (
-            <Modal title='File Upload' width='300px' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
+            <Modal title={<h5 className='text-primary'>{'File Upload'}</h5>} width='20%' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
                 <input type='file'  onChange={(e) => { this.setState({...this.state,selectedFile:e.target.files[0]}) }}></input>
             </Modal>
         )

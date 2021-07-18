@@ -48,7 +48,7 @@ class RenameDialog extends Component {
     render() {
 
         return (
-            <Modal title='Rename' width='200px' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
+            <Modal title={<h5 className='text-primary'>{'Rename'}</h5>} width='20%' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
                 <input type='text' value={this.state.nodeName} onChange={(e) => { this.setState({...this.state,nodeName:e.target.value}) }}></input>
             </Modal>
         )

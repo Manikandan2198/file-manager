@@ -41,8 +41,8 @@ class FolderDialog extends Component {
     render() {
 
         return (
-            <Modal title='Folder Name' width='200px' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
-                <input type='text' value={this.state.folderName} onChange={(e) => { this.setState({...this.state,folderName:e.target.value}) }}></input>
+            <Modal title={<h5 className='text-primary'>{'Folder Name'}</h5>} width='20%' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
+                <input type='text' className='w-100' value={this.state.folderName} onChange={(e) => { this.setState({...this.state,folderName:e.target.value}) }}></input>
             </Modal>
         )
 
