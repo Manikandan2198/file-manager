@@ -16,8 +16,8 @@ class Tree extends Component {
         }
 
     render() {
-        const { files } = this.props;
-        let root = CreateFileStructure(files)[0];
+        const { fileSystem } = this.props;
+        let root = CreateFileStructure(fileSystem)[0];
         return (
             <div className="w-25 bg-white p-2">
                 <div style={{ width: '100%', height: '7%', background: '#f2f3f9' }} className='m-2 p-2'>
@@ -36,7 +36,7 @@ class Tree extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        files: state.fileSystem,
+        fileSystem: state.fileSystem,
     };
 
 }

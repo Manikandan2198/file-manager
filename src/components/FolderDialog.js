@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal,message as AntdMessage } from 'antd';
 import md5 from 'md5';
+import { ADD_ENTRY} from '../common/Constants';
 
 const getDate = () => {
     let d = new Date(),
@@ -57,7 +58,7 @@ const mapStateToProps=(state)=>{
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        addEntry:(entry)=>{dispatch({type:"ADD_ENTRY",entry})}
+        addEntry:(entry)=>{dispatch({type:ADD_ENTRY,entry})}
     }
 }
 

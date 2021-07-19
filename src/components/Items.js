@@ -6,6 +6,7 @@ import { Menu, Dropdown } from 'antd';
 import RenameDialog from './RenameDialog';
 import PropertiesDialog from './PropertiesDialog';
 import icons from '../common/Icons';
+import {  DELETE_ENTRY, MULTIPLE_DELETE, FOLDER, FILE, CHANGE_PATH} from '../common/Constants'
 
 
 class Item extends Component {
@@ -17,9 +18,8 @@ class Item extends Component {
 
     onDoubleClick = () => {
         const { node, changeFolder, globalPath } = this.props;
-        console.log(`${globalPath}${node.name}${'/'}`)
         console.log(md5(`${globalPath}${node.name}${'/'}`));
-        if (node.type === 'folder')
+        if (node.type === FOLDER)
             changeFolder(`${globalPath}${node.name}${'/'}`)
         else
             saveAs(node.file,node.name);
@@ -33,16 +33,14 @@ class Item extends Component {
     onDelete=()=>{
         const {deleteEntry, node} = this.props;
         if(confirm("Do you want to delete this item")){
-            deleteEntry(md5(node.path));
-            
+            deleteEntry(md5(node.path));  
         }
     }
     onMultipleDelete=()=>{
         const {selectedNodes, deleteMultipleEntry} = this.props;
         if(confirm("Do you want to delete selected items")){
             deleteMultipleEntry(selectedNodes);
-        }
-        
+        } 
     }
     render() {
         const { node, searchText } = this.props;
@@ -71,7 +69,7 @@ class Item extends Component {
         )
         let nameParts = node.name.split('.');
         let ext = nameParts[nameParts.length-1];
-        let iconSrc = (node.type === 'folder')?icons['folder']:icons[ext]?icons[ext]:icons['file'];
+        let iconSrc = (node.type === FOLDER)?icons[FOLDER]:icons[ext]?icons[ext]:icons[FILE];
         return (
             <Dropdown overlay={this.props.selectedNodes.length>1?multipleMenu:singleMenu} trigger={['contextMenu']}>
                 <div onContextMenu={(e) => {this.props.onClick(md5(node.path),e)}} onClick={(e) => {this.props.onClick(md5(node.path),e);e.stopPropagation()}} onDoubleClick={this.onDoubleClick} style={{ height: 100, width: 100, background: this.props.isSelected ? '#d9eae6' : '' }} className='p-2 m-2 text-center'>
@@ -87,9 +85,9 @@ class Item extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeFolder: (path) => { dispatch({ type: "CHANGE_PATH", path }) },
-        deleteEntry : (entry) => { dispatch({type:"DELETE_ENTRY",entry})},
-        deleteMultipleEntry: (entries) =>{dispatch({type:"DELETE_MULTIPLE",entries})}
+        changeFolder: (path) => { dispatch({ type: CHANGE_PATH, path }) },
+        deleteEntry : (entry) => { dispatch({type:DELETE_ENTRY,entry})},
+        deleteMultipleEntry: (entries) =>{dispatch({type:MULTIPLE_DELETE,entries})}
     }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import {connect} from 'react-redux';
 import MenuItems from '../components/MenuItems';
+import { CHANGE_PATH, ROOT} from '../common/Constants';
 
 class SideMenu extends Component {
   state =
@@ -24,7 +25,7 @@ class SideMenu extends Component {
     const { fileStructure } = this.state;
     return (
       <div style={{overflow:'auto',height:'90%',width:'100%',background:'#f2f3f9'}} className='m-2 p-2'>
-        <div onClick={()=>{this.props.changeFolder('root/')}} style={{cursor:'pointer'}}><h4 className='text-primary'>{'root /'} </h4></div>
+        <div onClick={()=>{this.props.changeFolder(ROOT)}} style={{cursor:'pointer'}}><h4 className='text-primary'>{ROOT} </h4></div>
         {fileStructure.children.map(element=>{
           return <MenuItems key={element.path} node = {element} childVisible={true}></MenuItems>
         })}
@@ -36,7 +37,7 @@ class SideMenu extends Component {
 
 const mapDispatchToProps = (dispatch)=>{
   return {
-    changeFolder:(path)=>{dispatch({type:"CHANGE_PATH",path})}
+    changeFolder:(path)=>{dispatch({type:CHANGE_PATH,path})}
   }
 }
 export default connect(null,mapDispatchToProps)(SideMenu)

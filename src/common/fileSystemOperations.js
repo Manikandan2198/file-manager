@@ -1,4 +1,5 @@
 import md5 from 'md5';
+import { FILE, FOLDER, ROOT} from './Constants';
 
 const recalculateSize=(fileSystem,parentId,size)=>{
     while(parentId !== null){
@@ -41,7 +42,7 @@ const CheckForDuplicatesFiles = (fileSystem,files,name,index)=>{
 
 const AddEntry = (fileSystem,newEntry)=>{
     if(fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name === newEntry.name).length>0){
-        if(newEntry.type === 'folder'){
+        if(newEntry.type === FOLDER){
             newEntry.name = CheckForDuplicatesFolder(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
             newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
         }else{
@@ -63,7 +64,7 @@ const MultipleDelete = (fileSystem,entries)=>{
 
 const DeletEntry=(fileSystem,entryId)=>{
     let data = fileSystem[entryId]
-    if(data.type === 'folder'){
+    if(data.type === FOLDER){
         data.children.forEach(element => {
             DeletEntry(fileSystem,element);
         });
@@ -79,8 +80,13 @@ const DeletEntry=(fileSystem,entryId)=>{
 }
 
 const EditEntry = (fileSystem, oldEntry, newEntry)=>{
+    let parent = fileSystem[oldEntry.parentID];
+    let index = parent.children.indexOf(md5(oldEntry.path));
+    if(index !== -1)
+        parent.children.splice(index,1);
+    delete fileSystem[md5(oldEntry.path)];
     if(fileSystem[newEntry.parentID].children.map(item=>fileSystem[item]).filter(item=>item.name === (newEntry.name)).length>0){
-        if(newEntry.type === 'folder'){
+        if(newEntry.type === FOLDER){
             newEntry.name = CheckForDuplicatesFolder(fileSystem,fileSystem[newEntry.parentID].children,newEntry.name,1);
             newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
         }else{
@@ -88,10 +94,7 @@ const EditEntry = (fileSystem, oldEntry, newEntry)=>{
             newEntry.path = `${newEntry.parentPath}${newEntry.name}${'/'}`
         }   
     }
-    let index = parent.children.indexOf(md5(oldEntry.path));
-    if(index !== -1)
-        parent.children[index] = md5(newEntry.path);
-    delete fileSystem[md5(oldEntry.path)];
+    parent.children.push(md5(newEntry.path));
     fileSystem[md5(newEntry.path)] = newEntry;
     newEntry.children.map(elementId=>fileSystem[elementId]).forEach(element=>{
         let newElement = {...element};
@@ -119,7 +122,7 @@ const SearchText = (fileSystem,currentEntry,text)=>{
 }
 
 const CreateFileStructure = (fileSystem)=>{
-    let rootId = md5('root/');
+    let rootId = md5(ROOT);
     let fileStructure = [];
     fileStructure.push({...fileSystem[rootId]});
     GenerateTreeRecursively(fileStructure,fileSystem,fileStructure[0]);
@@ -127,7 +130,7 @@ const CreateFileStructure = (fileSystem)=>{
 }
 
 const GenerateTreeRecursively = (fileStructure,fileSystem,root)=>{
-    root.children = root.children.filter(id=>fileSystem[id].type !== 'file').map(elementId=>{return {...fileSystem[elementId]}});
+    root.children = root.children.filter(id=>fileSystem[id].type !== FILE).map(elementId=>{return {...fileSystem[elementId]}});
     root.children.forEach(element=>GenerateTreeRecursively(fileStructure,fileSystem,element));
     return fileStructure;
 }

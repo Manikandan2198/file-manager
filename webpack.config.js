@@ -22,7 +22,7 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(woff(2)?|ttf|jfif|eot|png|svg|jpg|gif)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|jfif|eot|)(\?v=\d+\.\d+\.\d+)?$/,
         use: [{
             loader : 'file-loader',
             options : {
@@ -31,6 +31,12 @@ module.exports = {
             }
         }],
       },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: {
+          loader: 'url-loader',
+        },
+      }
     ]
   },
   plugins: [

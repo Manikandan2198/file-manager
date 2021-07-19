@@ -9,7 +9,6 @@ class PropertiesDialog extends Component {
     
     render() {
         const {node} = this.props;
-        console.log(this.props.node)
         return (
             <Modal title={<h5 className='text-primary'>{'Properties'}</h5>} width='30%' visible={this.props.visible} onCancel={this.props.onCancel} footer={null}>
                 <div className='row'>

@@ -6,7 +6,8 @@ import {connect} from 'react-redux';
 import Item from '../components/Items';
 import Navigator from '../components/Navigator';
 import SearchBar from '../components/SearchBar';
-import {SearchText} from '../common/fileSystemOperations'
+import {SearchText} from '../common/fileSystemOperations';
+import { CHANGE_PATH, ROOT} from '../common/Constants';
 
 class Main extends Component{
 
@@ -45,7 +46,6 @@ class Main extends Component{
 
     OnItemClick=(nodeId,e)=>{
         const {selectedNodes} = this.state;
-        console.log(event);
         if(!e){
             this.setState({...this.state,selectedNodes:[nodeId]})
         }else if(e.type === 'contextmenu' && selectedNodes.length>1){
@@ -72,7 +72,7 @@ class Main extends Component{
             <div className="w-75 bg-white p-2 h-100">
                 <div className=" m-2 row p-2"  style={{background:'#f2f3f9'}}>
                     <div className="col-8 d-flex flex-row">
-                        <Button disabled={globalPath === 'root/' || searchText !== ''} onClick={this.onPathUp} type="link" icon={<ArrowUpOutlined />}></Button>
+                        <Button disabled={globalPath === ROOT || searchText !== ''} onClick={this.onPathUp} type="link" icon={<ArrowUpOutlined />}></Button>
                         <Navigator isSearch={searchText !== ''}></Navigator>
                     </div>
                     <div className="col-4">
@@ -104,7 +104,7 @@ const mapStateToProps=(state)=>{
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        changeFolder:(path)=>{dispatch({type:"CHANGE_PATH",path})}
+        changeFolder:(path)=>{dispatch({type:CHANGE_PATH,path})}
     }
 }
 

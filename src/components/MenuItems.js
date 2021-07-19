@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { CaretRightFilled, CaretDownFilled } from '@ant-design/icons';
+import { CHANGE_PATH} from '../common/Constants';
 
 class MenuItems extends Component {
 
@@ -25,7 +26,9 @@ class MenuItems extends Component {
                     :
                     <div style={{ display: 'flex', flexDirection: 'column' }} >
                         <div style={{ display: 'flex', flexDirection: 'row' }} key={node.path} >
-                            <div style={{ width: '5%', alignItems: 'center' }} onClick={() => { this.setState({ ...this.state, childVisible: !this.state.childVisible }) }}>{this.state.childVisible ? <CaretDownFilled /> : <CaretRightFilled />}</div>
+                            <div style={{ width: '5%', alignItems: 'center' }} onClick={() => { this.setState({ ...this.state, childVisible: !this.state.childVisible }) }}>
+                                {this.state.childVisible ? <CaretDownFilled /> : <CaretRightFilled />}
+                            </div>
                             <div style={{ width: '90%', cursor: "pointer" }} onClick={this.onmenuClick}><h6 className="p-1">{node.name}</h6></div>
                         </div>
                         {this.state.childVisible ?
@@ -45,7 +48,7 @@ class MenuItems extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeFolder: (path) => { dispatch({ type: "CHANGE_PATH", path }) }
+        changeFolder: (path) => { dispatch({ type: CHANGE_PATH, path }) }
     }
 }
 export default connect(null, mapDispatchToProps)(MenuItems)

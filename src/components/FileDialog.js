@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal,message as AntdMessage } from 'antd';
 import md5 from 'md5';
+import { ADD_ENTRY} from '../common/Constants';
 
 const getDate = () => {
     let d = new Date(),
@@ -43,7 +44,7 @@ class FileDialog extends Component {
     render() {
 
         return (
-            <Modal title={<h5 className='text-primary'>{'File Upload'}</h5>} width='20%' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
+            <Modal title={<h5 className='text-primary'>{'File Upload'}</h5>} width='25%' visible={this.props.visible} onCancel={this.props.onCancel} onOk={this.onOk}>
                 <input type='file'  onChange={(e) => { this.setState({...this.state,selectedFile:e.target.files[0]}) }}></input>
             </Modal>
         )
@@ -59,7 +60,7 @@ const mapStateToProps=(state)=>{
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        addEntry:(entry)=>{dispatch({type:"ADD_ENTRY",entry})}
+        addEntry:(entry)=>{dispatch({type:ADD_ENTRY,entry})}
     }
 }
 

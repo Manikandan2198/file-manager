@@ -1,6 +1,7 @@
 import React,{Component } from 'react';
 import {connect} from 'react-redux';
 import {Input } from 'antd';
+import { CHANGE_PATH} from '../common/Constants';
 
 class SearchBar extends Component{
     state={
@@ -27,7 +28,7 @@ const mapStateToProps=(state)=>{
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        changeFolder:(path)=>{dispatch({type:"CHANGE_PATH",path})}
+        changeFolder:(path)=>{dispatch({type:CHANGE_PATH,path})}
     }
 }
 

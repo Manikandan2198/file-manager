@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import { CHANGE_PATH} from '../common/Constants';
 
 class Navigator extends Component{
     onPathClick=(item)=>{
@@ -37,7 +38,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        changeFolder:(path)=>{dispatch({type:"CHANGE_PATH",path})}
+        changeFolder:(path)=>{dispatch({type:CHANGE_PATH,path})}
     }
 }
 
